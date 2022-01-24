@@ -1,0 +1,27 @@
+name: sentinel
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  sentinel-format:
+    runs-on: ubuntu-latest
+    container:
+      image: hashicorp/sentinel
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Sentinel Format
+        run: sentinel fmt -check=true $(find . -name "*.sentinel")
+  sentinel-test:
+    runs-on: ubuntu-latest
+    container:
+      image: hashicorp/sentinel
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Sentinel Test
+        run: sentinel test $(find . -name "*.sentinel" ! -path "*/testdtaa/*")
+        
