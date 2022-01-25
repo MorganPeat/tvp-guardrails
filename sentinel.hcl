@@ -196,3 +196,7 @@ policy "gcp-cis-5.3-storage-bucket-logging-is-enabled" {
   enforcement_level = "advisory"
 }
 
+policy "change-management-system-permits-deployment" {
+  source            = "./change-management-system-permits-deployment.sentinel"
+  enforcement_level = "hard-mandatory"
+}

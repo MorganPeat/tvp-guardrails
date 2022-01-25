@@ -1,0 +1,33 @@
+# Taken from https://github.com/hashicorp/terraform-guides/blob/master/governance/second-generation/cloud-agnostic/http-examples/check-external-http-api.sentinel
+
+##### Imports #####
+import "http"
+import "json"
+
+##### Functions #####
+
+# Validate that the external system returns yes or maybe
+check_change_management_system = func() {
+	req = http.request("https://raw.githubusercontent.com/MorganPeat/tvp-guardrails/main/change-management-check.json")
+	res = json.unmarshal(http.get(req).body)
+	deployment_permitted = res.deployment_permitted
+	print("deployment_permitted:", deployment_permitted)
+
+	case deployment_permitted {
+		when "true":
+			return true
+		else:
+			return false
+	}
+
+}
+
+##### Rules #####
+
+# Call the validation function
+approved = check_change_management_system()
+
+# Main rule
+main = rule {
+	approved
+}
